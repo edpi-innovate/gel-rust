@@ -7,6 +7,7 @@ use gel_protocol::common::{Capabilities, Cardinality, InputLanguage, IoFormat};
 use gel_protocol::model::Json;
 use gel_protocol::query_arg::{Encoder, QueryArgs};
 use gel_protocol::QueryResult;
+use log::trace;
 use tokio::sync::oneshot;
 use tokio::time::sleep;
 
@@ -226,6 +227,7 @@ impl Transaction {
     async fn ensure_started(&mut self) -> anyhow::Result<(), Error> {
         if !self.started {
             let options = &self.options;
+            println!("START TRANSACTION OPTIONS - read_only: {}", self.options.transaction.read_only);
             let q = if options.transaction.read_only {
                 "START TRANSACTION READ ONLY"
             } else {

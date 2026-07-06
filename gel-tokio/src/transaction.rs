@@ -228,6 +228,7 @@ impl Transaction {
         if !self.started {
             let options = &self.options;
             println!("START TRANSACTION OPTIONS - read_only: {}", self.options.transaction.read_only);
+            trace!("START TRANSACTION OPTIONS - read_only: {}", self.options.transaction.read_only);
             let q = if options.transaction.read_only {
                 "START TRANSACTION READ ONLY"
             } else {

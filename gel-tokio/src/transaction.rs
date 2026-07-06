@@ -226,8 +226,13 @@ impl Transaction {
     async fn ensure_started(&mut self) -> anyhow::Result<(), Error> {
         if !self.started {
             let options = &self.options;
+            let q = if options.transaction.read_only {
+                "START TRANSACTION READ ONLY"
+            } else {
+                "START TRANSACTION"
+            };
             self.conn
-                .statement("START TRANSACTION", &options.state, &options.annotations)
+                .statement(q, &options.state, &options.annotations)
                 .await?;
             self.started = true;
         }

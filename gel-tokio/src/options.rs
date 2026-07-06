@@ -34,8 +34,8 @@ pub enum RetryCondition {
 /// [`with_transaction_options`](crate::Client::with_transaction_options).
 #[derive(Debug, Clone, Default)]
 pub struct TransactionOptions {
-    read_only: bool,
-    deferrable: bool,
+    pub read_only: bool,
+    pub deferrable: bool,
 }
 
 /// This structure contains options for retrying transactions and queries

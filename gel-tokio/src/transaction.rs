@@ -7,7 +7,6 @@ use gel_protocol::common::{Capabilities, Cardinality, InputLanguage, IoFormat};
 use gel_protocol::model::Json;
 use gel_protocol::query_arg::{Encoder, QueryArgs};
 use gel_protocol::QueryResult;
-use log::trace;
 use tokio::sync::oneshot;
 use tokio::time::sleep;
 

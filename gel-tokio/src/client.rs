@@ -92,8 +92,8 @@ impl Client {
             {
                 Ok(resp) => return Ok(resp),
                 Err(e) => {
-                    // log::info!("query_helper error: {}", e.to_string());
-                    // log::info!("query_helper error: ");
+                    log::info!("query_helper error: {}", e.to_string());
+                    log::info!("query_helper error: ");
                     let allow_retry = match e.get::<QueryCapabilities>() {
                         // Error from a weird source, or just a bug
                         // Let's keep on the safe side
@@ -101,11 +101,11 @@ impl Client {
                         Some(QueryCapabilities::Unparsed) => true,
                         Some(QueryCapabilities::Parsed(c)) => c.is_empty(),
                     };
-                    // log::info!("allow_retry: {}", allow_retry);
-                    // log::info!("should retry: {}", e.has_tag(SHOULD_RETRY));
+                    log::info!("allow_retry: {}", allow_retry);
+                    log::info!("should retry: {}", e.has_tag(SHOULD_RETRY));
                     if allow_retry && e.has_tag(SHOULD_RETRY) {
                         let rule = self.options.retry.get_rule(&e);
-                        // log::info!("attemtps count: {}", rule.attempts);
+                        log::info!("attemtps count: {}", rule.attempts);
                         iteration += 1;
                         if iteration < rule.attempts {
                             let duration = (rule.backoff)(iteration);

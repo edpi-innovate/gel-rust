@@ -92,7 +92,8 @@ impl Client {
             {
                 Ok(resp) => return Ok(resp),
                 Err(e) => {
-                    println!("query_helper error: {}", e.to_string());
+                    // println!("query_helper error: {}", e.to_string());
+                    println!("query_helper error: ");
                     let allow_retry = match e.get::<QueryCapabilities>() {
                         // Error from a weird source, or just a bug
                         // Let's keep on the safe side

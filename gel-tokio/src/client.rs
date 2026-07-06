@@ -6,6 +6,7 @@ use gel_protocol::common::{Capabilities, Cardinality, IoFormat};
 use gel_protocol::model::Json;
 use gel_protocol::query_arg::QueryArgs;
 use gel_protocol::QueryResult;
+use log::trace;
 use tokio::time::sleep;
 
 use crate::errors::InvalidArgumentError;
@@ -91,6 +92,7 @@ impl Client {
             {
                 Ok(resp) => return Ok(resp),
                 Err(e) => {
+                    trace!("query_helper error: {}", e.to_string());
                     let allow_retry = match e.get::<QueryCapabilities>() {
                         // Error from a weird source, or just a bug
                         // Let's keep on the safe side
@@ -98,8 +100,11 @@ impl Client {
                         Some(QueryCapabilities::Unparsed) => true,
                         Some(QueryCapabilities::Parsed(c)) => c.is_empty(),
                     };
+                    trace!("allow_retry: {}", allow_retry);
+                    trace!("should retry: {}", e.has_tag(SHOULD_RETRY));
                     if allow_retry && e.has_tag(SHOULD_RETRY) {
                         let rule = self.options.retry.get_rule(&e);
+                        trace!("attemtps count: {}", rule.attempts);
                         iteration += 1;
                         if iteration < rule.attempts {
                             let duration = (rule.backoff)(iteration);
